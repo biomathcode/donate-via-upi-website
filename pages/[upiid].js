@@ -68,9 +68,11 @@ const QRcodeImage = styled("img", {
 function UPIID() {
   const { query } = useRouter();
 
-  const { upiid, pn, amount_list, button_label } = query;
+  const { upiid, pn, amount_list } = query;
 
-  const amountList = amount_list.split(",") || "10, 20, 50, 100";
+  const amountList = amount_list
+    ? amount_list.split(",")
+    : "10, 20, 50,100".split(",");
 
   const [value, setValue] = useState(amountList[0]);
   const currency = "INR";
