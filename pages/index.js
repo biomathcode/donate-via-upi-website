@@ -1,7 +1,7 @@
 import Head from "next/head";
-import Image from "next/image";
+
 import styles from "../styles/Home.module.css";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import Layout from "../components/Layout";
 import { amountsAtom } from "../lib/Store";
 import { RightIcon } from "../components/Icons";
