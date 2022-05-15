@@ -72,7 +72,7 @@ function UPIID() {
 
   const amountList = amount_list
     ? amount_list.split(",")
-    : "10, 20, 50,100".split(",");
+    : "10,20,50,100".split(",");
 
   const [value, setValue] = useState(amountList[0]);
   const currency = "INR";
@@ -148,7 +148,7 @@ function UPIID() {
                       onClick={() => setValue(el)}
                       key={el}
                     >
-                      {el}
+                      {"\u20B9"} {el}
                     </ListItem>
                   );
                 })}
