@@ -220,6 +220,12 @@ function UPIID() {
               }
             `}
           </style>
+          <p style={{ position: "fixed", bottom: "20px" }}>
+            Powered by{" "}
+            <a href="https://payviaupi.com" target="_blank" rel="noreferrer">
+              payviaupi.com
+            </a>
+          </p>
         </main>
       </div>
     </article>
