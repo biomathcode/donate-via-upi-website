@@ -65,14 +65,8 @@ const QRcodeImage = styled("img", {
   marginRight: "auto",
 });
 
-function UPIID() {
-  const { query } = useRouter();
-
-  const { upiid, pn, amount_list } = query;
-
-  const amountList = amount_list
-    ? amount_list.split(",")
-    : ("10", "20", "50", "100").split(",");
+const PaymentComponent = ({ upiid, pn, amount_list }) => {
+  const amountList = amount_list && amount_list.split(",");
 
   const [value, setValue] = useState(amountList[0]);
   const currency = "INR";
@@ -90,145 +84,159 @@ function UPIID() {
   }, [value, upiid, pn]);
 
   return (
-    <article className="container">
-      <Head>
-        <title>
-          UPI payment to {pn} at upi id {upiid}
-        </title>
-      </Head>
-      <div className="flex center">
-        <main className="flex column max center" style={{ gap: "10px" }}>
-          <Heading>
-            UPI payment to
-            <Name>{pn ? pn : upiid}</Name>
-          </Heading>
-          <div>
-            <div className="flex column">
-              <div
-                style={{
-                  fontSize: "12px",
-                  fontWeight: "500",
-                  textAlign: "left",
-                  marginLeft: "20px",
-                  color: "#6B6B6B",
-                  marginTop: "20px",
-                }}
-              >
-                Enter the Amount
-              </div>
-              <div className="flex center " style={{ gap: "5px" }}>
-                <label
+    amount_list && (
+      <article className="container">
+        <Head>
+          <title>
+            UPI payment to {pn} at upi id {upiid}
+          </title>
+        </Head>
+        <div className="flex center">
+          <main className="flex column max center" style={{ gap: "10px" }}>
+            <Heading>
+              UPI payment to
+              <Name>{pn ? pn : upiid}</Name>
+            </Heading>
+            <div>
+              <div className="flex column">
+                <div
                   style={{
-                    fontSize: "20px",
-                    color: "#1F1F1F",
-                    alignItems: "center",
+                    fontSize: "12px",
+                    fontWeight: "500",
+                    textAlign: "left",
+                    marginLeft: "20px",
+                    color: "#6B6B6B",
+                    marginTop: "20px",
                   }}
                 >
-                  {" "}
-                  {"\u20B9"}{" "}
-                </label>
-                <input
-                  tabIndex="0"
-                  type="number"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                />
+                  Enter the Amount
+                </div>
+                <div className="flex center " style={{ gap: "5px" }}>
+                  <label
+                    style={{
+                      fontSize: "20px",
+                      color: "#1F1F1F",
+                      alignItems: "center",
+                    }}
+                  >
+                    {" "}
+                    {"\u20B9"}{" "}
+                  </label>
+                  <input
+                    tabIndex="0"
+                    type="number"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
 
-            <ListContainer>
-              {amountList &&
-                amountList.map((el) => {
-                  return (
-                    <ListItem
-                      onKeyDown={(e) =>
-                        e.key === "Enter" ? setValue(el) : null
-                      }
-                      tabIndex="0"
-                      onClick={() => setValue(el)}
-                      key={el}
-                    >
-                      {"\u20B9"} {el}
-                    </ListItem>
-                  );
-                })}
-            </ListContainer>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0px",
-            }}
-          >
-            <QRcodeImage src={img} alt={upiid} />
+              <ListContainer>
+                {amountList &&
+                  amountList.map((el) => {
+                    return (
+                      <ListItem
+                        onKeyDown={(e) =>
+                          e.key === "Enter" ? setValue(el) : null
+                        }
+                        tabIndex="0"
+                        onClick={() => setValue(el)}
+                        key={el}
+                      >
+                        {"\u20B9"} {el}
+                      </ListItem>
+                    );
+                  })}
+              </ListContainer>
+            </div>
             <div
               style={{
-                fontSize: "14px",
-                color: "#6B6B6B",
-                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0px",
               }}
             >
-              {upiid}
-            </div>
-          </div>
-
-          <a
-            href={url}
-            className="link"
-            style={{
-              alignSelf: "center",
-              padding: "5px 20px",
-              borderRadius: "10px",
-            }}
-          >
-            <div
-              className="flex "
-              style={{
-                gap: "10px",
-                alignContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div>Open with</div>
+              <QRcodeImage src={img} alt={upiid} />
               <div
                 style={{
-                  margin: "0px 10px",
-                  display: "flex",
-                  alignContent: "center",
-                  alignItems: "center",
-                  width: "30px",
+                  fontSize: "14px",
+                  color: "#6B6B6B",
+                  textAlign: "center",
                 }}
               >
-                <GpayIcon />
-              </div>
-              <div style={{ maring: "0px 10px", width: "30px" }}>
-                <PaytmIcon />
-              </div>
-              <div style={{ maring: "0px 10px", width: "30px" }}>
-                <PhonepeIcon />
+                {upiid}
               </div>
             </div>
-          </a>
-          <style jsx>
-            {`
-              main {
-                height: 100vh;
-                width: 100vw;
-                display: flex;
-                justify-content: center;
-              }
-            `}
-          </style>
-          <p style={{ position: "fixed", bottom: "20px" }}>
-            Powered by{" "}
-            <a href="https://payviaupi.com" target="_blank" rel="noreferrer">
-              payviaupi.com
+
+            <a
+              href={url}
+              className="link"
+              style={{
+                alignSelf: "center",
+                padding: "5px 20px",
+                borderRadius: "10px",
+              }}
+            >
+              <div
+                className="flex "
+                style={{
+                  gap: "10px",
+                  alignContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div>Open with</div>
+                <div
+                  style={{
+                    margin: "0px 10px",
+                    display: "flex",
+                    alignContent: "center",
+                    alignItems: "center",
+                    width: "30px",
+                  }}
+                >
+                  <GpayIcon />
+                </div>
+                <div style={{ maring: "0px 10px", width: "30px" }}>
+                  <PaytmIcon />
+                </div>
+                <div style={{ maring: "0px 10px", width: "30px" }}>
+                  <PhonepeIcon />
+                </div>
+              </div>
             </a>
-          </p>
-        </main>
-      </div>
-    </article>
+            <style jsx>
+              {`
+                main {
+                  height: 100vh;
+                  width: 100vw;
+                  display: flex;
+                  justify-content: center;
+                }
+              `}
+            </style>
+            <p style={{ position: "fixed", bottom: "20px" }}>
+              Powered by{" "}
+              <a href="https://payviaupi.com" target="_blank" rel="noreferrer">
+                payviaupi.com
+              </a>
+            </p>
+          </main>
+        </div>
+      </article>
+    )
+  );
+};
+
+function UPIID() {
+  const { query } = useRouter();
+
+  const { upiid, pn, amount_list } = query;
+
+  return (
+    amount_list && (
+      <PaymentComponent upiid={upiid} pn={pn} amount_list={amount_list} />
+    )
   );
 }
 
