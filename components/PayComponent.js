@@ -65,7 +65,7 @@ const QRcodeImage = styled("img", {
 });
 
 function PayComponent({ upiid, pn, amount_list = "100, 200, 300, 400" }) {
-  const amountList = amount_list.split(",");
+  const [amountList, setAmountList] = useState(amount_list.split(","));
 
   const [value, setValue] = useState(amountList[0]);
   const currency = "INR";

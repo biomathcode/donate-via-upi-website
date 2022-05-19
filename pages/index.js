@@ -115,20 +115,21 @@ export default function Home() {
                     </div>
                   </div>
                 </form>
-                <button
-                  onClick={() => {
-                    router.push(
-                      "/" +
-                        upi +
-                        "?pn=" +
-                        name +
-                        "&amount_list=" +
-                        amountList.join()
-                    );
-                  }}
+                <a
+                  href={
+                    "/" +
+                    upi +
+                    "?pn=" +
+                    name +
+                    "&amount_list=" +
+                    amountList.join()
+                  }
+                  target="_blank"
+                  without
+                  rel="noreferrer"
                 >
-                  Preview
-                </button>
+                  <button>Preview</button>
+                </a>
               </div>
               <div className="flex column max">
                 <PayComponent
