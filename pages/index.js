@@ -1,9 +1,9 @@
 import Head from "next/head";
 
 import styles from "../styles/Home.module.css";
-import { useRecoilState } from "recoil";
+
 import Layout from "../components/Layout";
-import { amountsAtom } from "../lib/Store";
+
 import { RightIcon } from "../components/Icons";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -14,18 +14,24 @@ export default function Home() {
 
   const [upi, setUPI] = useState();
   const [name, setName] = useState();
-  const [amountList, setAmountList] = useRecoilState(amountsAtom);
+  const [amountList, setAmountList] = useState([]);
   function handleList(el) {
-    if (amountList.includes(el)) {
-      const newlist = amountList.filter((e) => e !== el);
+    if (amountList.includes(Number(el))) {
+      const newlist = amountList.filter((e) => e !== Number(el));
       setAmountList([...newlist]);
     }
-    if ((amountList.length < 4) & !amountList.includes(el)) {
+    if ((amountList.length < 4) & !amountList.includes(Number(el))) {
       const amoutList = amountList.length === null ? true : false;
       if (amoutList) {
         setAmountList([el]);
       } else {
-        setAmountList([...amountList, el]);
+        const newList = [...amountList, el];
+        const mapList = newList.map((el) => Number(el));
+        const rightList = mapList.sort(function (a, b) {
+          return a - b;
+        });
+
+        setAmountList(rightList);
       }
     }
   }
@@ -99,7 +105,7 @@ export default function Home() {
                               justifyContent: "space-between",
                               gap: "10px",
                               listStyle: "none",
-                              border: amountList.includes(el)
+                              border: amountList.includes(Number(el))
                                 ? "1px solid green"
                                 : "1px solid #eee",
                               borderRadius: "5px",
@@ -108,7 +114,7 @@ export default function Home() {
                             key={el}
                           >
                             <span>{"₹ " + el}</span>
-                            {amountList.includes(el) && <RightIcon />}
+                            {amountList.includes(Number(el)) && <RightIcon />}
                           </div>
                         );
                       })}
@@ -132,11 +138,7 @@ export default function Home() {
                 </a>
               </div>
               <div className="flex column max">
-                <PayComponent
-                  pn={name}
-                  amount_list={amountList.join()}
-                  upiid={upi}
-                />
+                <PayComponent pn={name} amount_list={amountList} upiid={upi} />
               </div>
             </div>
           </main>
