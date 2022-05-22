@@ -1,7 +1,7 @@
 import QRCode from "qrcode";
 import Head from "next/head";
 import { useState, useEffect } from "react";
-import { GpayIcon, PhonepeIcon, PaytmIcon } from "./../components/Icons";
+
 import { styled } from "@stitches/react";
 
 const generateQR = (text) => {
@@ -64,22 +64,21 @@ const QRcodeImage = styled("img", {
   marginRight: "auto",
 });
 
-function PayComponent({ upiid, pn, amount_list = "100, 200, 300, 400" }) {
-  const [amountList, setAmountList] = useState(amount_list.split(","));
-
-  const [value, setValue] = useState(amountList[0]);
+function PayComponent({ upiid, pn, amount_list }) {
+  const [value, setValue] = useState(amount_list[0]);
   const currency = "INR";
 
   const [img, setImg] = useState("");
 
-  const [url, setUrl] = useState("");
+  useEffect(() => {
+    setValue(amount_list[0]);
+  }, [amount_list]);
 
   useEffect(() => {
     let qrcodelink = `upi://pay?cu=${String(currency)}&pa=${upiid}&am=${String(
       value
     )}&pn=${encodeURIComponent(pn)}`;
     generateQR(qrcodelink).then((res) => setImg(res));
-    setUrl(qrcodelink);
   }, [value, upiid, pn]);
 
   return (
@@ -129,8 +128,8 @@ function PayComponent({ upiid, pn, amount_list = "100, 200, 300, 400" }) {
             </div>
 
             <ListContainer>
-              {amountList &&
-                amountList.map((el) => {
+              {amount_list &&
+                amount_list.map((el) => {
                   return (
                     <ListItem
                       onKeyDown={(e) =>
@@ -164,44 +163,6 @@ function PayComponent({ upiid, pn, amount_list = "100, 200, 300, 400" }) {
               {upiid}
             </div>
           </div>
-
-          <a
-            href={url}
-            className="link"
-            style={{
-              alignSelf: "center",
-              padding: "5px 20px",
-              borderRadius: "10px",
-            }}
-          >
-            <div
-              className="flex "
-              style={{
-                gap: "10px",
-                alignContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div>Open with</div>
-              <div
-                style={{
-                  margin: "0px 10px",
-                  display: "flex",
-                  alignContent: "center",
-                  alignItems: "center",
-                  width: "30px",
-                }}
-              >
-                <GpayIcon />
-              </div>
-              <div style={{ maring: "0px 10px", width: "30px" }}>
-                <PaytmIcon />
-              </div>
-              <div style={{ maring: "0px 10px", width: "30px" }}>
-                <PhonepeIcon />
-              </div>
-            </div>
-          </a>
         </section>
       </div>
     </article>
